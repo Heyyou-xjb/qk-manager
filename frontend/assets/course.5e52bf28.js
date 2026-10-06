@@ -1,0 +1,1 @@
+import{s as e}from"./request.39ca3484.js";const t=s=>e.get("/courses",{params:s}),u=s=>e.delete(`/courses/${s}`),c=s=>e.post("/courses",s),r=s=>e.put("/courses",s),a=s=>e.get(`/courses/${s}`),g=s=>e.get(`/courses/subject/${s}`);export{t as a,a as b,c,u as d,g,r as u};

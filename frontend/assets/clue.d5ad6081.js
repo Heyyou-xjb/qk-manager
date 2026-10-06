@@ -1,0 +1,1 @@
+import{s as e}from"./request.39ca3484.js";const o=s=>e.get("/clues",{params:s}),c=s=>e.post("/clues",s),a=s=>e.get(`/clues/${s}`),l=s=>e.put("/clues",s),n=(s,t)=>e.put(`/clues/assign/${s}/${t}`),g=(s,t)=>e.put(`/clues/false/${s}`,t),p=s=>e.put(`/clues/toBusiness/${s}`),r=s=>e.get("/clues/pool",{params:s});export{a,c as b,p as c,n as d,r as e,o as g,g as r,l as u};

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.ClueTrackRecordMapper">
+
+    <select id="queryListByClueId" resultType="com.itheima.model.resp.ClueTrackRecordResp">
+        select
+            ctr.*,
+            u.name as assignName
+        from clue_track_record ctr
+        left join user u on ctr.user_id = u.id
+        where clue_id = #{clueId}
+    </select>
+</mapper>

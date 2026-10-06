@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.OperateLogMapper">
+
+    <!-- 操作日志列表，带出操作人姓名 -->
+    <select id="queryPageList" resultType="com.itheima.model.resp.OperateLogResp">
+        select
+            ol.*,
+            u.name operateUserName
+        from operate_log ol
+        left join user u on ol.operate_user_id = u.id
+        <where>
+            <if test="req.operateUserName != null and req.operateUserName != ''">
+                and u.name like CONCAT('%', #{req.operateUserName}, '%')
+            </if>
+        </where>
+        order by ol.id desc
+    </select>
+
+</mapper>

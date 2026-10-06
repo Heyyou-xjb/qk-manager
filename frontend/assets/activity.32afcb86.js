@@ -1,0 +1,1 @@
+import{s as i}from"./request.39ca3484.js";const s=t=>i.get("/activities",{params:t}),c=t=>i.delete(`/activities/${t}`),a=t=>i.post("/activities",t),v=t=>i.put("/activities",t),o=t=>i.get(`/activities/${t}`),y=t=>i.get(`/activities/type/${t}`);export{s as a,o as b,a as c,c as d,y as g,v as u};

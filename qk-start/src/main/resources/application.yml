@@ -1,0 +1,38 @@
+server:
+  port: ${QK_SERVER_PORT:8080}
+#数据库连接信息（口令等敏感项一律通过环境变量注入，见项目根目录 .env.example）
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${QK_DB_URL:jdbc:mysql://localhost:3306/qk}
+    username: ${QK_DB_USERNAME:root}
+    password: ${QK_DB_PASSWORD:}
+
+#mybatis-plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true  # 开启驼峰命名
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印sql
+  global-config:
+    db-config:
+      id-type: auto # 全局主键策略 数据库自增
+  mapper-locations: classpath*:/mappers/*.xml # 映射文件位置
+
+#阿里云OSS配置（AK/SK 通过环境变量注入，禁止写死在代码或配置中）
+qk:
+  oss:
+    region: ${QK_OSS_REGION:cn-beijing}
+    endpoint: ${QK_OSS_ENDPOINT:oss-cn-beijing.aliyuncs.com}
+    bucketName: ${QK_OSS_BUCKET:}
+    accessKeyId: ${QK_OSS_ACCESS_KEY_ID:}
+    accessKeySecret: ${QK_OSS_ACCESS_KEY_SECRET:}
+
+  jwt:
+    #生产环境必须用环境变量覆盖为高强度随机串
+    secretKey: ${QK_JWT_SECRET_KEY:qk-dev-only-jwt-secret-change-me}
+    expirationTime: ${QK_JWT_EXPIRATION_TIME:86400000}
+
+#spring事务管理日志
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug

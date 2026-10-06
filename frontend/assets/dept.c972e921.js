@@ -1,0 +1,1 @@
+import{s as e}from"./request.39ca3484.js";const p=()=>e.get("/depts/list"),d=t=>e.get("/depts",{params:t}),a=t=>e.delete(`/depts/${t}`),o=t=>e.post("/depts",t),c=t=>e.get(`/depts/${t}`),g=t=>e.put("/depts",t);export{c as a,o as b,p as c,a as d,d as g,g as u};

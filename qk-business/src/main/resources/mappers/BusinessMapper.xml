@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.BusinessMapper">
+    <!-- 商机列表：管理员(userId 为空)看全部，商机专员只看归属自己的商机 -->
+    <select id="getBusinessList" resultType="com.itheima.model.resp.BusinessPageResp">
+        select
+            b.*,
+            u.name assignName
+        from business b
+        left join user u on b.user_id = u.id
+        <where>
+            b.status in (1,2,3)
+            <if test="req.businessId != null and req.businessId != ''">
+                and b.id = #{req.businessId}
+            </if>
+            <if test="req.name != null and req.name != ''">
+                and b.name like CONCAT('%', #{req.name}, '%')
+            </if>
+            <if test="req.phone != null and req.phone != ''">
+                and b.phone like CONCAT('%', #{req.phone}, '%')
+            </if>
+            <if test="req.status != null and req.status != ''">
+                and b.status = #{req.status}
+            </if>
+            <if test="req.assignName != null and req.assignName != ''">
+                and u.name like CONCAT('%', #{req.assignName}, '%')
+            </if>
+            <if test="userId != null">
+                and b.user_id = #{userId}
+            </if>
+        </where>
+        order by b.id desc
+    </select>
+
+    <!-- 商机公海：只查待分配(status=1)的商机，所有人都能查看 -->
+    <select id="getBusinessPoolList" resultType="com.itheima.model.resp.BusinessPageResp">
+        select
+            b.*,
+            u.name assignName
+        from business b
+        left join user u on b.user_id = u.id
+        <where>
+            b.status = 1
+            <if test="req.businessId != null and req.businessId != ''">
+                and b.id = #{req.businessId}
+            </if>
+            <if test="req.name != null and req.name != ''">
+                and b.name like CONCAT('%', #{req.name}, '%')
+            </if>
+            <if test="req.phone != null and req.phone != ''">
+                and b.phone like CONCAT('%', #{req.phone}, '%')
+            </if>
+            <if test="req.subject != null">
+                and b.subject = #{req.subject}
+            </if>
+        </where>
+        order by b.id desc
+    </select>
+
+    <!-- 商机详情，带出归属人姓名 -->
+    <select id="getBusinessInfoById" resultType="com.itheima.model.resp.BusinessInfoResp">
+        select
+            b.*,
+            u.name assignName
+        from business b
+        left join user u on b.user_id = u.id
+        where b.id = #{id}
+    </select>
+
+    <select id="countBusiness" resultType="com.itheima.model.resp.OverviewResp">
+        select
+            count(*) businessTotal,
+            count(if(status=1, 1, null)) businessWaitAllot,
+            count(if(status=2, 1, null)) businessWaitFollow,
+            count(if(status=3, 1, null)) businessFollowing,
+            count(if(status=4, 1, null)) businessFalse,
+            count(if(status=5, 1, null)) businessConvertCustomer
+        from business
+    </select>
+</mapper>

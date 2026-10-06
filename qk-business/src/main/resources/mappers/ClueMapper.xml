@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.ClueMapper">
+
+    <select id="queryPageList" resultType="com.itheima.model.resp.CluePageResp">
+        select
+        c.*,
+        u.name assignName
+        from clue c
+        left join user u on c.user_id = u.id
+        <where>
+            c.status in (1,2,3)
+            <if test="req.clueId != null">
+                and c.id = #{req.clueId}
+            </if>
+            <if test="req.phone != null and req.phone != ''">
+                and c.phone like CONCAT('%', #{req.phone}, '%')
+            </if>
+            <if test="req.status != null">
+                and c.status = #{req.status}
+            </if>
+            <if test="req.channel != null">
+                and c.channel = #{req.channel}
+            </if>
+            <if test="req.assignName != null and req.assignName != ''">
+                and u.name like CONCAT('%', #{req.assignName}, '%')
+            </if>
+            <!-- 非管理员只看归属自己的线索：userId 是 Mapper 方法上的独立参数（CluePageReq 中没有该属性） -->
+            <if test="userId != null">
+                and c.user_id = #{userId}
+            </if>
+        </where>
+        order by c.id desc
+    </select>
+    <!-- 线索池：只查“待分配”线索(status=1)，所有人都能查看，不按归属人过滤；列表需要展示活动名称 -->
+    <select id="queryPoolList" resultType="com.itheima.model.resp.CluePoolResp">
+        select
+        c.*,
+        a.name activityName
+        from clue c
+        left join activity a on c.activity_id = a.id
+        <where>
+            c.status = 4
+            <if test="req.clueId != null">
+                and c.id = #{req.clueId}
+            </if>
+            <if test="req.phone != null and req.phone != ''">
+                and c.phone like CONCAT('%', #{req.phone}, '%')
+            </if>
+            <if test="req.channel != null">
+                and c.channel = #{req.channel}
+            </if>
+        </where>
+        order by c.id desc
+    </select>
+
+    <select id="countClue" resultType="com.itheima.model.resp.OverviewResp">
+        select
+            count(*) clueTotal,
+            count(if(status=1, 1, null)) clueWaitAllot,
+            count(if(status=2, 1, null)) clueWaitFollow,
+            count(if(status=3, 1, null)) clueFollowing,
+            count(if(status=4, 1, null)) clueFalse,
+            count(if(status=5, 1, null)) clueConvertBusiness
+        from clue;
+    </select>
+
+    <!-- 线索详情：带出归属人姓名和活动名称 -->
+    <select id="queryClueById" resultType="com.itheima.model.resp.ClueInfoResp">
+        select
+            c.*,
+            u.name assignName,
+            a.name activityName
+        from clue c
+        left join user u on c.user_id = u.id
+        left join activity a on c.activity_id = a.id
+        where c.id = #{id}
+    </select>
+</mapper>

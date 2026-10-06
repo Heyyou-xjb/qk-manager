@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.CustomerMapper">
+
+    <!-- 客户列表，带出意向课程名称 -->
+    <select id="queryPageList" resultType="com.itheima.model.resp.CustomerPageResp">
+        select
+            c.*,
+            co.name courseName
+        from customer c
+        left join course co on c.course_id = co.id
+        <where>
+            <if test="req.phone != null and req.phone != ''">
+                and c.phone like CONCAT('%', #{req.phone}, '%')
+            </if>
+            <if test="req.name != null and req.name != ''">
+                and c.name like CONCAT('%', #{req.name}, '%')
+            </if>
+            <if test="req.channel != null">
+                and c.channel = #{req.channel}
+            </if>
+            <if test="req.subject != null">
+                and c.subject = #{req.subject}
+            </if>
+        </where>
+        order by c.id desc
+    </select>
+
+    <!-- 客户详情 -->
+    <select id="queryCustomerById" resultType="com.itheima.model.resp.CustomerPageResp">
+        select
+            c.*,
+            co.name courseName
+        from customer c
+        left join course co on c.course_id = co.id
+        where c.id = #{id}
+    </select>
+
+</mapper>

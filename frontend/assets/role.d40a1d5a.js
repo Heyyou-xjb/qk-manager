@@ -1,0 +1,1 @@
+import{s}from"./request.39ca3484.js";const t=()=>s.get("/roles/list"),l=e=>s.get("/roles",{params:e}),a=e=>s.delete(`/roles/${e}`),r=e=>s.post("/roles",e),c=e=>s.get(`/roles/${e}`),g=e=>s.put("/roles",e);export{c as a,r as b,t as c,a as d,l as g,g as u};
